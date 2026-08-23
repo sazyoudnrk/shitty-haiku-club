@@ -4,293 +4,299 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>クソ俳句同好会</title>
-<meta name="description" content="しょうもねえ みんなで詠もう クソ俳句">
+<meta name="description" content="しょうもねえ　みんなで詠もう　クソ俳句">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@700&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* 夜空 */
-  --sky:#141C42;
-  --sky-deep:#0E1430;
-  --sky-line:rgba(212,175,106,.22);
-  /* 五色の短冊 */
-  --p-ao:#7FA88B;
-  --p-aka:#C4566B;
-  --p-ki:#E3C169;
-  --p-shiro:#F0EADC;
-  --p-murasaki:#8B7AA8;
-  /* 金 */
-  --gold:#D4AF6A;
-  --gold-dim:#9A8047;
-  --ink:#22203A;
-  --mincho:"Shippori Mincho B1",serif;
-  --gothic:"Zen Kaku Gothic New",system-ui,sans-serif;
+  /* 句会の掲示板 */
+  --board:#26312C;
+  --board-deep:#1C241F;
+  --line:rgba(239,233,218,.13);
+  /* 朱肉 */
+  --shu:#C0402C;
+  --shu-soft:rgba(192,64,44,.14);
+  /* 墨 */
+  --sumi:#2B2A26;
+  --kinari:#EFE9DA;
+  /* 和紙五種 */
+  --w0:#EFE9DA; --w1:#DBE3DB; --w2:#E8DDE3; --w3:#DCE2EA; --w4:#EFE3C9;
+
+  --disp:"Zen Old Mincho",serif;
+  --ku:"Shippori Mincho B1",serif;
+  --ui:"Zen Kaku Gothic New",system-ui,sans-serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{
-  font-family:var(--gothic);
-  background:var(--sky-deep);
-  color:#E8E4F0;
+  font-family:var(--ui);
+  background:var(--board-deep);
+  color:var(--kinari);
   min-height:100dvh;
-  overflow-x:hidden;
+  background-image:linear-gradient(180deg,var(--board) 0,var(--board-deep) 420px);
+  background-repeat:no-repeat;
 }
-/* 星空 */
-.sky{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(1.5px 1.5px at 12% 18%, rgba(255,255,255,.55), transparent),
-    radial-gradient(1px 1px at 78% 9%, rgba(255,255,255,.4), transparent),
-    radial-gradient(1.5px 1.5px at 42% 62%, rgba(255,255,255,.35), transparent),
-    radial-gradient(1px 1px at 88% 44%, rgba(255,255,255,.45), transparent),
-    radial-gradient(1px 1px at 24% 82%, rgba(255,255,255,.3), transparent),
-    radial-gradient(1.5px 1.5px at 63% 91%, rgba(255,255,255,.4), transparent),
-    radial-gradient(1px 1px at 5% 51%, rgba(255,255,255,.3), transparent),
-    linear-gradient(180deg,var(--sky) 0%,var(--sky-deep) 70%);
-}
-.wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 16px 140px}
+.wrap{max-width:840px;margin:0 auto;padding:0 12px 130px}
 
 /* ── ヘッダ ── */
-header{padding:26px 0 14px;display:flex;flex-direction:column;gap:6px}
+header{padding:24px 2px 12px;display:flex;align-items:center;gap:11px}
+.seal{
+  flex:0 0 auto;width:38px;height:38px;border:2px solid var(--shu);
+  border-radius:3px;display:grid;place-items:center;
+  color:var(--shu);font-family:var(--disp);font-size:19px;line-height:1;
+  transform:rotate(-3deg);
+}
 .brand{
-  font-family:var(--mincho);font-weight:700;
-  font-size:24px;letter-spacing:.08em;color:var(--gold);
-  line-height:1.15;margin:0;
+  font-family:var(--disp);font-size:23px;letter-spacing:.05em;
+  color:var(--kinari);line-height:1.2;margin:0 0 3px;font-weight:700;
 }
-.tagline{
-  font-size:11.5px;color:rgba(232,228,240,.5);letter-spacing:.06em;
-}
-/* 笹の紐 */
-.cord{
-  height:1px;width:100%;
-  background:linear-gradient(90deg,transparent,var(--sky-line) 8%,var(--sky-line) 92%,transparent);
-  margin:6px 0 0;
-}
+.tagline{font-size:11.5px;color:rgba(239,233,218,.45);letter-spacing:.03em}
+.rule{height:1px;background:var(--line);margin-top:8px}
 
 /* ── タブ ── */
-nav{display:flex;gap:2px;padding:14px 0 4px;position:sticky;top:0;z-index:5;
-  background:linear-gradient(180deg,var(--sky-deep) 72%,transparent);
-  backdrop-filter:blur(2px)}
+nav{display:flex;gap:0;padding:12px 0 0;position:sticky;top:0;z-index:5;
+  background:var(--board-deep)}
 .tab{
   flex:1;appearance:none;border:0;background:transparent;
-  font-family:var(--mincho);font-size:14px;letter-spacing:.1em;
-  color:rgba(232,228,240,.45);padding:9px 0 11px;cursor:pointer;
-  border-bottom:1px solid rgba(232,228,240,.1);transition:color .2s;
+  font-family:var(--ku);font-size:13.5px;letter-spacing:.06em;
+  color:rgba(239,233,218,.42);padding:9px 0 10px;cursor:pointer;
+  border-bottom:1px solid var(--line);transition:color .18s;
 }
-.tab[aria-selected="true"]{color:var(--gold);border-bottom:1px solid var(--gold)}
-.tab:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;border-radius:4px}
+.tab[aria-selected="true"]{color:var(--kinari);border-bottom:2px solid var(--shu)}
+.tab:focus-visible{outline:2px solid var(--shu);outline-offset:-2px}
 .meta{display:flex;justify-content:space-between;align-items:center;
-  padding:10px 2px 4px;font-size:11px;color:rgba(232,228,240,.4);letter-spacing:.05em}
-.reload{appearance:none;border:0;background:transparent;color:rgba(232,228,240,.55);
-  font-size:11px;font-family:var(--gothic);cursor:pointer;padding:4px 6px;letter-spacing:.05em}
-.reload:active{color:var(--gold)}
+  padding:9px 2px 2px;font-size:10.5px;color:rgba(239,233,218,.35)}
+.reload{appearance:none;border:0;background:transparent;
+  color:rgba(239,233,218,.5);font:inherit;cursor:pointer;padding:4px 5px}
+.reload:active{color:var(--shu)}
 
-/* ── 短冊グリッド ── */
-.grid{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:14px 12px;
-  grid-auto-flow:dense;padding-top:6px;
-}
-@media(min-width:560px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:800px){.grid{grid-template-columns:repeat(4,1fr)}}
+/* ── 短冊 ── */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px 7px;padding-top:8px}
+@media(min-width:520px){.grid{grid-template-columns:repeat(4,1fr);gap:12px 10px}}
+@media(min-width:760px){.grid{grid-template-columns:repeat(6,1fr)}}
 
 .tz{
-  position:relative;padding-top:20px;
-  animation:drop .45s cubic-bezier(.2,.8,.3,1) backwards;
+  position:relative;border-radius:2px;cursor:pointer;
+  padding:12px 7px 30px;height:222px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--sumi);border:0;font:inherit;text-align:initial;
+  box-shadow:0 2px 7px rgba(0,0,0,.3);
+  background-image:repeating-linear-gradient(0deg,rgba(43,42,38,.028) 0 1px,transparent 1px 4px);
+  animation:in .3s ease backwards;
 }
-.tz.wide{grid-column:span 2}
-@keyframes drop{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
-
-/* 吊り紐 */
-.tz::before{
-  content:"";position:absolute;top:0;left:50%;width:1px;height:20px;
-  background:linear-gradient(180deg,transparent,var(--gold-dim));
-}
-.paper{
-  position:relative;min-height:255px;border-radius:2px;
-  padding:20px 12px 34px;
-  display:flex;justify-content:center;
-  color:var(--ink);
-  box-shadow:0 6px 18px rgba(0,0,0,.32);
-  transform-origin:50% -20px;
-  animation:sway 6s ease-in-out infinite;
-  background-image:repeating-linear-gradient(90deg,rgba(0,0,0,.035) 0 1px,transparent 1px 5px);
-}
-/* 綴じ穴 */
-.paper::before{
-  content:"";position:absolute;top:7px;left:50%;transform:translateX(-50%);
-  width:5px;height:5px;border-radius:50%;
-  background:var(--sky-deep);box-shadow:inset 0 1px 1px rgba(0,0,0,.5);
-}
-@keyframes sway{0%,100%{transform:rotate(-1.1deg)}50%{transform:rotate(1.1deg)}}
-.tz:nth-child(3n+1) .paper{animation-duration:7.2s;animation-delay:-.9s}
-.tz:nth-child(3n+2) .paper{animation-duration:5.4s;animation-delay:-2.4s}
-.tz:nth-child(4n)   .paper{animation-duration:8s;animation-delay:-3.6s}
-
-.c0{background-color:var(--p-ao)}
-.c1{background-color:var(--p-aka)}
-.c2{background-color:var(--p-ki)}
-.c3{background-color:var(--p-shiro)}
-.c4{background-color:var(--p-murasaki)}
-.c0,.c1,.c4{color:#FBF8F2}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.tz:active{transform:scale(.985)}
+.tz:focus-visible{outline:2px solid var(--shu);outline-offset:2px}
+.w0{background-color:var(--w0)} .w1{background-color:var(--w1)}
+.w2{background-color:var(--w2)} .w3{background-color:var(--w3)}
+.w4{background-color:var(--w4)}
 
 .ku{
-  writing-mode:vertical-rl;text-orientation:upright;
-  font-family:var(--mincho);font-size:15.5px;line-height:1.85;
-  letter-spacing:.09em;max-height:100%;overflow:hidden;
-  white-space:pre-wrap;word-break:break-all;text-align:start;
+  writing-mode:vertical-rl;
+  font-family:var(--ku);font-weight:500;
+  font-size:13px;line-height:1.6;letter-spacing:.06em;
+  height:100%;max-width:100%;overflow:hidden;
+  white-space:pre-wrap;word-break:break-all;
 }
-/* 星（いいね） */
-.star{
-  position:absolute;left:0;right:0;bottom:0;
-  display:flex;align-items:center;justify-content:center;gap:5px;
+/* 続きあり */
+.more{
+  position:absolute;left:6px;top:12px;
+  font-family:var(--ku);font-size:13px;color:rgba(43,42,38,.45);
+  writing-mode:vertical-rl;display:none;
+}
+.tz.clipped .more{display:block}
+
+/* 点（朱印） */
+.ten{
+  position:absolute;left:0;right:0;bottom:0;height:30px;
+  display:flex;align-items:center;justify-content:center;gap:4px;
   appearance:none;border:0;background:transparent;cursor:pointer;
-  padding:9px 0 11px;font-family:var(--gothic);font-size:12px;
-  color:inherit;opacity:.62;transition:opacity .18s,transform .18s;
-  letter-spacing:.06em;
+  font-family:var(--ui);font-size:11px;color:rgba(43,42,38,.55);
 }
-.star:active{transform:scale(.93)}
-.star.on{opacity:1;font-weight:700}
-.star:focus-visible{outline:2px solid currentColor;outline-offset:-3px;border-radius:3px}
-.star .mark{font-size:14px;line-height:1}
-@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.4)}100%{transform:scale(1)}}
-.star.burst .mark{animation:pop .34s ease-out}
+.dot{
+  width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(43,42,38,.3);
+  display:grid;place-items:center;font-size:9px;line-height:1;color:transparent;
+  transition:background .2s,border-color .2s,color .2s;
+}
+.ten.on{color:var(--shu);font-weight:700}
+.ten.on .dot{background:var(--shu);border-color:var(--shu);color:#fff}
+@keyframes stamp{
+  0%{transform:scale(1.9) rotate(-14deg);opacity:0}
+  55%{transform:scale(.88) rotate(3deg);opacity:1}
+  100%{transform:scale(1) rotate(0);opacity:1}
+}
+.ten.press .dot{animation:stamp .4s cubic-bezier(.2,.9,.3,1)}
+.ten:focus-visible{outline:2px solid var(--shu);outline-offset:-3px}
 
-/* ── 空・読込 ── */
+/* ── 空・報せ ── */
 .note{
-  grid-column:1/-1;text-align:center;padding:64px 20px;
-  font-family:var(--mincho);color:rgba(232,228,240,.5);font-size:14px;line-height:2;
+  grid-column:1/-1;text-align:center;padding:56px 18px;
+  font-family:var(--ku);color:rgba(239,233,218,.45);font-size:13.5px;line-height:2.1;
 }
-.note b{display:block;color:var(--gold);font-size:16px;margin-bottom:8px;font-weight:400}
+.note b{display:block;color:var(--kinari);font-size:15px;margin-bottom:6px;font-weight:500}
 
-/* ── 詠むボタン ── */
+/* ── 投句ボタン ── */
 .fab{
   position:fixed;left:50%;transform:translateX(-50%);
-  bottom:calc(22px + env(safe-area-inset-bottom));z-index:20;
-  appearance:none;border:1px solid var(--gold);
-  background:var(--sky);color:var(--gold);
-  font-family:var(--mincho);font-size:16px;letter-spacing:.12em;
-  padding:13px 28px;border-radius:999px;cursor:pointer;
-  box-shadow:0 8px 26px rgba(0,0,0,.45);
+  bottom:calc(20px + env(safe-area-inset-bottom));z-index:20;
+  appearance:none;border:0;background:var(--shu);color:#fff;
+  font-family:var(--ku);font-weight:700;font-size:15px;letter-spacing:.14em;
+  padding:13px 32px;border-radius:2px;cursor:pointer;
+  box-shadow:0 6px 20px rgba(0,0,0,.45);
 }
 .fab:active{transform:translateX(-50%) scale(.96)}
-.fab:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 
-/* ── 投稿シート ── */
-.scrim{position:fixed;inset:0;z-index:30;background:rgba(6,9,24,.72);
-  opacity:0;pointer-events:none;transition:opacity .22s}
+/* ── 覆い・シート共通 ── */
+.scrim{position:fixed;inset:0;z-index:30;background:rgba(10,14,12,.76);
+  opacity:0;pointer-events:none;transition:opacity .2s}
 .scrim.open{opacity:1;pointer-events:auto}
 .sheet{
-  position:fixed;left:0;right:0;bottom:0;z-index:31;
-  background:var(--sky);border-top:1px solid var(--sky-line);
-  border-radius:16px 16px 0 0;padding:18px 18px calc(20px + env(safe-area-inset-bottom));
-  transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.3,1);
-  max-width:900px;margin:0 auto;
+  position:fixed;left:0;right:0;bottom:0;z-index:31;max-width:840px;margin:0 auto;
+  background:var(--board);border-top:1px solid var(--line);
+  border-radius:12px 12px 0 0;
+  padding:16px 16px calc(18px + env(safe-area-inset-bottom));
+  transform:translateY(101%);transition:transform .26s cubic-bezier(.2,.8,.3,1);
+  max-height:88dvh;overflow-y:auto;
 }
 .sheet.open{transform:none}
-.sheet h2{margin:0 0 14px;font-family:var(--mincho);font-weight:400;
-  font-size:15px;letter-spacing:.14em;color:var(--gold)}
-.editor{display:flex;gap:14px;align-items:stretch}
-.preview{
-  flex:0 0 92px;min-height:170px;border-radius:2px;padding:14px 8px;
-  display:flex;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.3);
-}
-.preview .ku{font-size:14px}
-.preview.empty .ku{opacity:.35}
+.sheet h2{margin:0 0 13px;font-family:var(--ku);font-weight:700;
+  font-size:14px;letter-spacing:.1em;color:var(--kinari)}
+
+/* 投句 */
+.editor{display:flex;gap:12px}
+.preview{flex:0 0 86px;height:168px;border-radius:2px;padding:12px 7px;
+  display:flex;align-items:center;justify-content:center;color:var(--sumi)}
+.preview .ku{font-size:12.5px}
+.preview.empty .ku{opacity:.3}
 .field{flex:1;display:flex;flex-direction:column;gap:8px}
 textarea{
-  flex:1;width:100%;resize:none;min-height:120px;
-  background:rgba(255,255,255,.05);border:1px solid rgba(232,228,240,.16);
-  border-radius:6px;padding:11px 12px;color:#E8E4F0;
-  font-family:var(--mincho);font-size:16px;line-height:1.9;letter-spacing:.05em;
+  flex:1;width:100%;resize:none;min-height:118px;
+  background:rgba(239,233,218,.05);border:1px solid var(--line);
+  border-radius:4px;padding:10px 11px;color:var(--kinari);
+  font-family:var(--ku);font-size:16px;line-height:1.85;
 }
-textarea:focus{outline:none;border-color:var(--gold)}
-textarea::placeholder{color:rgba(232,228,240,.28)}
-.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.count{font-size:11.5px;color:rgba(232,228,240,.45);font-variant-numeric:tabular-nums}
-.count.over{color:var(--p-aka);font-weight:700}
-.btns{display:flex;gap:8px}
+textarea:focus{outline:none;border-color:var(--shu)}
+textarea::placeholder{color:rgba(239,233,218,.25)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:9px}
+.count{font-size:11px;color:rgba(239,233,218,.4);font-variant-numeric:tabular-nums}
+.count.over{color:var(--shu);font-weight:700}
 .btn{
-  appearance:none;border:1px solid rgba(232,228,240,.2);border-radius:999px;
-  background:transparent;color:rgba(232,228,240,.7);
-  font-family:var(--gothic);font-size:13px;padding:9px 18px;cursor:pointer;letter-spacing:.06em;
+  appearance:none;border:1px solid var(--line);border-radius:2px;
+  background:transparent;color:rgba(239,233,218,.7);
+  font-family:var(--ui);font-size:12.5px;padding:9px 15px;cursor:pointer;
 }
-.btn.primary{background:var(--gold);border-color:var(--gold);color:#1A1533;font-weight:700}
-.btn:disabled{opacity:.35;cursor:default}
-.btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.hint{font-size:11px;color:rgba(232,228,240,.38);line-height:1.7;margin:10px 0 0}
+.btn.primary{background:var(--shu);border-color:var(--shu);color:#fff;font-weight:700}
+.btn.danger{border-color:var(--shu);color:var(--shu)}
+.btn:disabled{opacity:.32;cursor:default}
+.btns{display:flex;gap:7px}
+.hint{font-size:10.5px;color:rgba(239,233,218,.33);line-height:1.75;margin:9px 0 0}
+.err{font-size:11.5px;color:var(--shu);line-height:1.7;margin:8px 0 0;min-height:1em}
 
-/* ── トースト ── */
+/* 一句の詳細 */
+#detailPaper{
+  border-radius:2px;padding:24px 14px;min-height:230px;color:var(--sumi);
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+}
+#detailPaper .ku{font-size:16px;line-height:1.9;max-height:300px;overflow:auto}
+.detailBar{display:flex;justify-content:space-between;align-items:center;gap:8px}
+
+/* ── 管理 ── */
+.adminBar{display:flex;gap:8px;align-items:center;padding:12px 0;flex-wrap:wrap}
+.adminItem{
+  border:1px solid var(--line);border-radius:3px;padding:12px;margin-bottom:9px;
+  background:rgba(239,233,218,.03);
+}
+.adminItem p{margin:0 0 9px;font-family:var(--ku);font-size:14px;line-height:1.8;
+  white-space:pre-wrap;word-break:break-all}
+.adminItem .sub{font-family:var(--ui);font-size:11px;color:var(--shu);margin-bottom:8px}
+.adminForm{display:flex;flex-direction:column;gap:9px;max-width:340px;padding:14px 0}
+.adminForm input{
+  background:rgba(239,233,218,.05);border:1px solid var(--line);border-radius:4px;
+  padding:10px 11px;color:var(--kinari);font:inherit;font-size:16px;
+}
+.adminForm input:focus{outline:none;border-color:var(--shu)}
+
+/* ── 報せ ── */
 .toast{
-  position:fixed;left:50%;bottom:96px;transform:translate(-50%,10px);
-  z-index:40;background:var(--gold);color:#1A1533;
-  font-size:13px;font-weight:700;padding:10px 20px;border-radius:999px;
-  opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;letter-spacing:.08em;
+  position:fixed;left:50%;bottom:88px;transform:translate(-50%,8px);z-index:40;
+  background:var(--kinari);color:var(--sumi);font-size:12.5px;font-weight:700;
+  padding:10px 18px;border-radius:2px;opacity:0;pointer-events:none;
+  transition:opacity .18s,transform .18s;max-width:86vw;text-align:center;
 }
 .toast.show{opacity:1;transform:translate(-50%,0)}
+.setup{margin:16px 0;padding:14px;border:1px solid var(--shu);border-radius:3px;
+  background:var(--shu-soft);font-size:12.5px;line-height:1.8}
 
-/* ── セットアップ警告 ── */
-.setup{
-  margin:18px 0;padding:16px 16px;border:1px solid var(--p-ki);
-  border-radius:8px;background:rgba(227,193,105,.09);
-  font-size:13px;line-height:1.85;color:#F0E6C8;
-}
-.setup b{color:var(--p-ki)}
-.setup code{font-family:ui-monospace,monospace;font-size:12px;
-  background:rgba(0,0,0,.3);padding:1px 5px;border-radius:3px}
-
-@media (prefers-reduced-motion:reduce){
-  *{animation:none!important;transition-duration:.01ms!important}
-}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
-<div class="sky"></div>
-
 <div class="wrap">
   <header>
-    <h1 class="brand">クソ俳句同好会</h1>
-    <span class="tagline">しょうもねえ　みんなで詠もう　クソ俳句</span>
+    <div class="seal" aria-hidden="true">句</div>
+    <div>
+      <h1 class="brand">クソ俳句同好会</h1>
+      <div class="tagline">しょうもねえ　みんなで詠もう　クソ俳句</div>
+    </div>
   </header>
-  <div class="cord"></div>
+  <div class="rule"></div>
 
   <div id="setup" hidden></div>
 
-  <nav role="tablist">
-    <button class="tab" role="tab" data-mode="random"  aria-selected="true">ランダム</button>
-    <button class="tab" role="tab" data-mode="popular" aria-selected="false">週間人気</button>
-    <button class="tab" role="tab" data-mode="recent"  aria-selected="false">新着</button>
-  </nav>
-
-  <div class="meta">
-    <span id="modeNote">直近30日から、ランダムに100句</span>
-    <button class="reload" id="reload" type="button">↻ 読み直す</button>
+  <div id="publicView">
+    <nav role="tablist">
+      <button class="tab" role="tab" data-mode="random"  aria-selected="true">ランダム</button>
+      <button class="tab" role="tab" data-mode="popular" aria-selected="false">今週の高点</button>
+      <button class="tab" role="tab" data-mode="recent"  aria-selected="false">新着</button>
+    </nav>
+    <div class="meta">
+      <span id="modeNote"></span>
+      <button class="reload" id="reload" type="button">↻ 読み直す</button>
+    </div>
+    <main class="grid" id="grid" role="tabpanel"></main>
   </div>
 
-  <main class="grid" id="grid" role="tabpanel"></main>
+  <div id="adminView" hidden></div>
 </div>
 
-<button class="fab" id="fab" type="button">ここで一句</button>
+<button class="fab" id="fab" type="button">投句する</button>
 
 <div class="scrim" id="scrim"></div>
-<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
-  <h2 id="sheetTitle">一句、吊るす</h2>
+
+<!-- 投句 -->
+<section class="sheet" id="composeSheet" role="dialog" aria-modal="true" aria-labelledby="composeTitle">
+  <h2 id="composeTitle">一句、投じる</h2>
   <div class="editor">
-    <div class="preview empty c3" id="preview"><div class="ku" id="previewKu">　</div></div>
+    <div class="preview empty w0" id="preview"><div class="ku" id="previewKu">　</div></div>
     <div class="field">
-      <textarea id="input" maxlength="120" rows="4"
-        placeholder="ふるいけや&#10;かわずとびこむ&#10;みずのおと"
-        aria-label="俳句の本文"></textarea>
+      <textarea id="input" maxlength="130" rows="4"
+        placeholder="しょうもねえ&#10;みんなで詠もう&#10;クソ俳句" aria-label="句の本文"></textarea>
       <div class="row">
         <span class="count" id="count">0 / 100</span>
         <div class="btns">
           <button class="btn" id="cancel" type="button">やめる</button>
-          <button class="btn primary" id="submit" type="button" disabled>吊るす</button>
+          <button class="btn primary" id="submit" type="button" disabled>投じる</button>
         </div>
       </div>
     </div>
   </div>
-  <p class="hint">匿名です。名前も履歴も残りません。吊るした句はあとから消せません。改行すると短冊が行を変えます。</p>
+  <p class="err" id="composeErr"></p>
+  <p class="hint">匿名です。名前も履歴も残りません。投じた句はあとから消せません。改行すると短冊が行を変えます。</p>
+</section>
+
+<!-- 一句の詳細 -->
+<section class="sheet" id="detailSheet" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+  <h2 id="detailTitle">一句</h2>
+  <div id="detailPaper"><div class="ku" id="detailKu"></div></div>
+  <div class="detailBar">
+    <button class="btn" id="reportBtn" type="button">通報する</button>
+    <div class="btns">
+      <button class="btn" id="detailTen" type="button">点を入れる</button>
+      <button class="btn" id="detailClose" type="button">閉じる</button>
+    </div>
+  </div>
+  <p class="hint">通報が集まった句は自動で表に出なくなり、会の管理者が確認します。</p>
 </section>
 
 <div class="toast" id="toast"></div>
@@ -298,13 +304,14 @@ textarea::placeholder{color:rgba(232,228,240,.28)}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {
-  getFirestore, collection, addDoc, getDocs, updateDoc, doc,
+  getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc,
   query, orderBy, limit, where, serverTimestamp, increment, Timestamp
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import {
+  getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
-/* ══════════════════════════════════════════════════
-   ① ここに Firebase コンソールの設定を貼り替える
-   ══════════════════════════════════════════════════ */
+/* ══════════ Firebase 設定 ══════════ */
 const firebaseConfig = {
   apiKey:            "AIzaSyDW5HkquhS0XIGgdI3rL1N3pyqVlg-ZeUM",
   authDomain:        "shitty-haiku-club.firebaseapp.com",
@@ -314,251 +321,377 @@ const firebaseConfig = {
   appId:             "1:636909163464:web:2346b84ba75a0ee58466fd"
 };
 
-/* ══════════════════════════════════════════════════
-   ② 調整用の定数
-   ══════════════════════════════════════════════════ */
+/* ══════════ 調整用 ══════════ */
 const CONF = {
-  COLLECTION:    "haiku",
-  MAX_CHARS:     100,   // 1句の上限文字数
-  SHOW:          100,   // 一覧に出す件数
-  FETCH_LIMIT:   200,   // 1回のクエリで取る件数（読み取り回数に直結）
-  POPULAR_DAYS:  7,     // 週間人気の対象期間
-  RANDOM_DAYS:   30,    // ランダムの母集団
-  COOLDOWN_SEC:  30     // 連投クールダウン（0で無効）
+  COLLECTION:   "haiku",
+  MAX_CHARS:    100,
+  SHOW:         100,
+  FETCH_LIMIT:  200,
+  POPULAR_DAYS: 7,
+  RANDOM_DAYS:  30,
+  COOLDOWN_SEC: 30,
+  HIDE_AT:      3      // 通報がこの数に達したら表に出さない
 };
 
-const LS_LIKED = "dq.liked";
-const LS_LAST  = "dq.lastPost";
+/* 弾く言葉。必要に応じて足す */
+const NG_WORDS = [
+  // 差別・攻撃
+  "死ね","しね","殺す","ころす","자살","キチガイ","きちがい","気違い",
+  "土人","部落民","チョン","シナ人","ガイジ","池沼","знищ",
+  // 露骨な性的表現
+  "セックス","sex","エロ画像","童貞","処女厨","レイプ","強姦","児童ポルノ",
+  // 個人攻撃・晒し
+  "晒す","住所特定","電話番号は","本名は"
+];
+/* 弾く形（連絡先・宣伝） */
+const NG_PATTERNS = [
+  { re:/https?:\/\/|www\./i,            msg:"リンクは投じられません" },
+  { re:/[\w.+-]+@[\w-]+\.[\w.]+/,       msg:"メールアドレスは投じられません" },
+  { re:/\d{2,4}-?\d{2,4}-?\d{3,4}/,     msg:"電話番号らしき数字は投じられません" },
+  { re:/(.)\1{9,}/,                     msg:"同じ文字が続きすぎています" }
+];
 
-/* ── 起動 ── */
-const grid    = document.getElementById("grid");
-const setupEl = document.getElementById("setup");
-let db = null, mode = "random";
+const LS = { ten:"kh.ten", rep:"kh.rep", last:"kh.last" };
+
+/* ══════════ 起動 ══════════ */
+const grid = document.getElementById("grid");
+let db=null, auth=null, isAdmin=false, mode="random";
 const cache = { random:null, popular:null, recent:null };
 
 if (String(firebaseConfig.apiKey).startsWith("PASTE")) {
-  showSetup();
+  const s = document.getElementById("setup");
+  s.hidden=false; s.className="setup";
+  s.textContent="firebaseConfig がまだ空です。";
 } else {
-  try {
-    db = getFirestore(initializeApp(firebaseConfig));
-    load();
-  } catch (e) {
-    grid.innerHTML = note("つながりませんでした", "Firebase の設定を確認してください。");
-    console.error(e);
-  }
-}
-
-function showSetup(){
-  setupEl.hidden = false;
-  setupEl.className = "setup";
-  setupEl.innerHTML = `<b>あと1手順あります</b><br>
-    Firebase コンソールで作ったウェブアプリの設定を、この HTML の
-    <code>firebaseConfig</code> に貼り替えてください。それまで投稿と表示は動きません。`;
-  grid.innerHTML = note("準備中", "設定を入れると、ここに短冊が並びます。");
-}
-
-/* ── タブ ── */
-const MODE_NOTE = {
-  random:  `直近${CONF.RANDOM_DAYS}日から、ランダムに${CONF.SHOW}句`,
-  popular: `直近${CONF.POPULAR_DAYS}日で、星の多い順に${CONF.SHOW}句`,
-  recent:  `新しい順に${CONF.SHOW}句`
-};
-document.querySelectorAll(".tab").forEach(t=>{
-  t.addEventListener("click", ()=>{
-    if (t.dataset.mode === mode) return;
-    mode = t.dataset.mode;
-    document.querySelectorAll(".tab").forEach(x=>
-      x.setAttribute("aria-selected", String(x.dataset.mode === mode)));
-    document.getElementById("modeNote").textContent = MODE_NOTE[mode];
-    load();
+  const app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  auth = getAuth(app);
+  onAuthStateChanged(auth, u=>{
+    isAdmin = !!u;
+    if (location.hash === "#admin") renderAdmin();
   });
-});
-document.getElementById("reload").addEventListener("click", ()=>{
-  cache[mode] = null;
-  load();
-});
+  setMode("random");
+  routeHash();
+}
+window.addEventListener("hashchange", routeHash);
 
-/* ── 取得 ── */
+function routeHash(){
+  const admin = location.hash === "#admin";
+  document.getElementById("publicView").hidden = admin;
+  document.getElementById("adminView").hidden = !admin;
+  document.getElementById("fab").style.display = admin ? "none" : "";
+  if (admin) renderAdmin();
+}
+
+/* ══════════ 一覧 ══════════ */
+const MODE_NOTE = {
+  random:  `直近${CONF.RANDOM_DAYS}日から無作為に`,
+  popular: `直近${CONF.POPULAR_DAYS}日で点の多い順に`,
+  recent:  `新しい順に`
+};
+function setMode(m){
+  mode = m;
+  document.querySelectorAll(".tab").forEach(t=>
+    t.setAttribute("aria-selected", String(t.dataset.mode===m)));
+  document.getElementById("modeNote").textContent = MODE_NOTE[m];
+  load();
+}
+document.querySelectorAll(".tab").forEach(t=>
+  t.addEventListener("click", ()=>{ if(t.dataset.mode!==mode) setMode(t.dataset.mode); }));
+document.getElementById("reload").addEventListener("click", ()=>{ cache[mode]=null; load(); });
+
 async function load(){
   if (!db) return;
   if (cache[mode]) return render(cache[mode]);
-
-  grid.innerHTML = note("読み込んでいます", "");
-  try {
+  grid.innerHTML = note("読み込んでいます","");
+  try{
     const col = collection(db, CONF.COLLECTION);
     let q;
-    if (mode === "recent") {
-      q = query(col, orderBy("createdAt","desc"), limit(CONF.SHOW));
+    if (mode==="recent"){
+      q = query(col, orderBy("createdAt","desc"), limit(CONF.FETCH_LIMIT));
     } else {
-      const days  = mode === "popular" ? CONF.POPULAR_DAYS : CONF.RANDOM_DAYS;
-      const since = Timestamp.fromDate(new Date(Date.now() - days*864e5));
-      q = query(col, where("createdAt",">=",since),
-                     orderBy("createdAt","desc"), limit(CONF.FETCH_LIMIT));
+      const days = mode==="popular" ? CONF.POPULAR_DAYS : CONF.RANDOM_DAYS;
+      const since = Timestamp.fromDate(new Date(Date.now()-days*864e5));
+      q = query(col, where("createdAt",">=",since), orderBy("createdAt","desc"), limit(CONF.FETCH_LIMIT));
     }
-    const snap = await getDocs(q);
-    let list = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-
-    if (mode === "popular") list.sort((a,b)=>(b.likes||0)-(a.likes||0));
-    if (mode === "random")  shuffle(list);
+    let list = (await getDocs(q)).docs.map(d=>({id:d.id,...d.data()}))
+                 .filter(p => (p.reports||0) < CONF.HIDE_AT);
+    if (mode==="popular") list.sort((a,b)=>(b.likes||0)-(a.likes||0));
+    if (mode==="random")  shuffle(list);
     list = list.slice(0, CONF.SHOW);
-
     cache[mode] = list;
     render(list);
-  } catch (e) {
+  }catch(e){
     console.error(e);
-    grid.innerHTML = note("読み込めませんでした", "通信を確かめて、もう一度お試しください。");
+    grid.innerHTML = note("読み込めませんでした","通信を確かめて、もう一度お試しください。");
   }
 }
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}}
+function note(t,b){return `<p class="note"><b>${t}</b>${b}</p>`;}
 
-function shuffle(a){
-  for (let i=a.length-1; i>0; i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
-  }
-}
-
-/* ── 描画 ── */
 function render(list){
-  if (!list.length){
-    const msg = mode === "popular"
-      ? `この${CONF.POPULAR_DAYS}日はまだ静かです。`
-      : "まだ一句もありません。";
-    grid.innerHTML = note(msg, "最初の駄句を吊るしてください。");
+  if(!list.length){
+    grid.innerHTML = note(mode==="popular" ? `この${CONF.POPULAR_DAYS}日はまだ静かです。` : "まだ一句もありません。",
+                          "はじめの一句を投じてください。");
     return;
   }
-  const liked = getLiked();
-  grid.innerHTML = "";
+  const ten = getSet(LS.ten);
+  grid.innerHTML="";
   list.forEach((p,i)=>{
-    const text  = String(p.text||"");
-    const el    = document.createElement("article");
-    el.className = "tz" + (text.length > 24 ? " wide" : "");
-    el.style.animationDelay = Math.min(i,12)*22 + "ms";
-
-    const on = liked.has(p.id);
-    el.innerHTML = `
-      <div class="paper c${colorOf(p.id)}">
-        <div class="ku"></div>
-        <button class="star${on?" on":""}" type="button"
-          aria-label="この句に星をつける" ${on?'aria-pressed="true"':'aria-pressed="false"'}>
-          <span class="mark">${on?"★":"☆"}</span><span class="n">${p.likes||0}</span>
-        </button>
-      </div>`;
-    el.querySelector(".ku").textContent = text;
-    el.querySelector(".star").addEventListener("click", ev => like(p, ev.currentTarget));
+    const on = ten.has(p.id);
+    const el = document.createElement("button");
+    el.type="button";
+    el.className = `tz w${colorOf(p.id)}`;
+    el.style.animationDelay = Math.min(i,15)*18+"ms";
+    el.innerHTML = `<span class="more">…</span><div class="ku"></div>
+      <span class="ten${on?" on":""}"><span class="dot">点</span><span class="n">${p.likes||0}</span></span>`;
+    el.querySelector(".ku").textContent = p.text||"";
+    el.querySelector(".ten").addEventListener("click", ev=>{
+      ev.stopPropagation(); addTen(p, ev.currentTarget);
+    });
+    el.addEventListener("click", ()=>openDetail(p));
     grid.appendChild(el);
   });
+  requestAnimationFrame(()=>{
+    grid.querySelectorAll(".tz").forEach(el=>{
+      const k = el.querySelector(".ku");
+      if (k.scrollWidth > k.clientWidth+1) el.classList.add("clipped");
+    });
+  });
 }
+function colorOf(id){let h=0;for(const c of String(id))h=(h*31+c.charCodeAt(0))>>>0;return h%5;}
 
-function note(title, body){
-  return `<p class="note"><b>${title}</b>${body}</p>`;
+/* ══════════ 点 / 通報 ══════════ */
+function getSet(k){try{return new Set(JSON.parse(localStorage.getItem(k)||"[]"));}catch{return new Set();}}
+function addSet(k,v){const s=getSet(k);s.add(v);localStorage.setItem(k,JSON.stringify([...s]));}
+
+async function addTen(p, btn){
+  if (getSet(LS.ten).has(p.id)) return toast("もう点を入れています");
+  addSet(LS.ten, p.id);
+  p.likes = (p.likes||0)+1;
+  if (btn){
+    btn.classList.add("on","press");
+    btn.querySelector(".n").textContent = p.likes;
+    setTimeout(()=>btn.classList.remove("press"),420);
+  }
+  syncTenButtons(p);
+  try{ await updateDoc(doc(db,CONF.COLLECTION,p.id), { likes: increment(1) }); }
+  catch(e){ console.error(e); toast("点を入れられませんでした"); }
 }
-
-/* idから五色を決める（保存不要） */
-function colorOf(id){
-  let h = 0;
-  for (const ch of String(id)) h = (h*31 + ch.charCodeAt(0)) >>> 0;
-  return h % 5;
-}
-
-/* ── 星 ── */
-function getLiked(){
-  try { return new Set(JSON.parse(localStorage.getItem(LS_LIKED) || "[]")); }
-  catch { return new Set(); }
-}
-async function like(post, btn){
-  const liked = getLiked();
-  if (liked.has(post.id)) return toast("もう星をつけています");
-
-  liked.add(post.id);
-  localStorage.setItem(LS_LIKED, JSON.stringify([...liked]));
-  post.likes = (post.likes||0) + 1;
-  btn.classList.add("on","burst");
-  btn.setAttribute("aria-pressed","true");
-  btn.querySelector(".mark").textContent = "★";
-  btn.querySelector(".n").textContent = post.likes;
-  setTimeout(()=>btn.classList.remove("burst"), 360);
-
-  try {
-    await updateDoc(doc(db, CONF.COLLECTION, post.id), { likes: increment(1) });
-  } catch (e) {
-    console.error(e);
-    toast("星をおくれませんでした");
+function syncTenButtons(p){
+  const b = document.getElementById("detailTen");
+  if (current && current.id===p.id){
+    b.textContent = `点を入れた（${p.likes}）`; b.disabled = true;
   }
 }
-
-/* ── 投稿 ── */
-const sheet   = document.getElementById("sheet");
-const scrim   = document.getElementById("scrim");
-const input   = document.getElementById("input");
-const countEl = document.getElementById("count");
-const submit  = document.getElementById("submit");
-const preview = document.getElementById("preview");
-const prevKu  = document.getElementById("previewKu");
-
-document.getElementById("fab").addEventListener("click", openSheet);
-document.getElementById("cancel").addEventListener("click", closeSheet);
-scrim.addEventListener("click", closeSheet);
-document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeSheet(); });
-
-function openSheet(){
-  if (!db) return toast("まだ設定が入っていません");
-  sheet.classList.add("open"); scrim.classList.add("open");
-  preview.className = "preview empty c" + Math.floor(Math.random()*5);
-  setTimeout(()=>input.focus(), 260);
+async function report(p){
+  if (getSet(LS.rep).has(p.id)) return toast("もう通報しています");
+  addSet(LS.rep, p.id);
+  try{
+    await updateDoc(doc(db,CONF.COLLECTION,p.id), { reports: increment(1) });
+    toast("通報しました");
+    closeSheets();
+    Object.keys(cache).forEach(k=>cache[k]=null);
+    load();
+  }catch(e){ console.error(e); toast("通報できませんでした"); }
 }
-function closeSheet(){
-  sheet.classList.remove("open"); scrim.classList.remove("open");
-  input.blur();
+
+/* ══════════ 詳細 ══════════ */
+let current=null;
+const scrim = document.getElementById("scrim");
+const detailSheet = document.getElementById("detailSheet");
+const composeSheet = document.getElementById("composeSheet");
+
+function openDetail(p){
+  current = p;
+  const paper = document.getElementById("detailPaper");
+  paper.className = `w${colorOf(p.id)}`;
+  document.getElementById("detailKu").textContent = p.text||"";
+  const b = document.getElementById("detailTen");
+  const has = getSet(LS.ten).has(p.id);
+  b.disabled = has;
+  b.textContent = has ? `点を入れた（${p.likes||0}）` : `点を入れる（${p.likes||0}）`;
+  document.getElementById("reportBtn").disabled = getSet(LS.rep).has(p.id);
+  detailSheet.classList.add("open"); scrim.classList.add("open");
 }
+document.getElementById("detailTen").addEventListener("click", ()=>{
+  if(!current) return;
+  addTen(current, null);
+  const card = [...grid.querySelectorAll(".tz")].find(el=>el.querySelector(".ku").textContent===current.text);
+  if (card){ const t=card.querySelector(".ten"); t.classList.add("on","press"); t.querySelector(".n").textContent=current.likes; }
+});
+document.getElementById("reportBtn").addEventListener("click", ()=>{
+  if(!current) return;
+  if (confirm("この句を通報しますか？")) report(current);
+});
+document.getElementById("detailClose").addEventListener("click", closeSheets);
+scrim.addEventListener("click", closeSheets);
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeSheets(); });
+function closeSheets(){
+  detailSheet.classList.remove("open");
+  composeSheet.classList.remove("open");
+  scrim.classList.remove("open");
+  current=null;
+}
+
+/* ══════════ 投句 ══════════ */
+const input=document.getElementById("input"), countEl=document.getElementById("count"),
+      submit=document.getElementById("submit"), preview=document.getElementById("preview"),
+      previewKu=document.getElementById("previewKu"), composeErr=document.getElementById("composeErr");
+
+document.getElementById("fab").addEventListener("click", ()=>{
+  if(!db) return toast("まだ準備ができていません");
+  composeErr.textContent="";
+  preview.className = "preview empty w"+(Math.random()*5|0);
+  composeSheet.classList.add("open"); scrim.classList.add("open");
+  setTimeout(()=>input.focus(),240);
+});
+document.getElementById("cancel").addEventListener("click", closeSheets);
 
 input.addEventListener("input", ()=>{
-  const t = input.value;
-  const n = [...t].length;
+  const t=input.value, n=[...t].length;
   countEl.textContent = `${n} / ${CONF.MAX_CHARS}`;
-  countEl.classList.toggle("over", n > CONF.MAX_CHARS);
-  submit.disabled = !t.trim() || n > CONF.MAX_CHARS;
-  prevKu.textContent = t.trim() ? t : "　";
+  countEl.classList.toggle("over", n>CONF.MAX_CHARS);
+  submit.disabled = !t.trim() || n>CONF.MAX_CHARS;
+  previewKu.textContent = t.trim() ? t : "　";
   preview.classList.toggle("empty", !t.trim());
+  composeErr.textContent="";
 });
 
-submit.addEventListener("click", async ()=>{
-  const text = input.value.trim().replace(/\n{3,}/g, "\n\n");
-  const n = [...text].length;
-  if (!text || n > CONF.MAX_CHARS) return;
+/* 同一・水増しを見分けるための正規化 */
+function fingerprint(t){
+  return t.normalize("NFKC")
+    .replace(/[0-9]/g,"")
+    .replace(/[\s\u3000]/g,"")
+    .replace(/[!-/:-@\[-`{-~、。！？「」『』（）・…ー〜～]/g,"")
+    .toLowerCase();
+}
+async function idFor(t){
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(fingerprint(t)));
+  return [...new Uint8Array(buf)].slice(0,16).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+function screen(t){
+  for (const p of NG_PATTERNS) if (p.re.test(t)) return p.msg;
+  const flat = t.normalize("NFKC").toLowerCase().replace(/[\s\u3000]/g,"");
+  for (const w of NG_WORDS) if (flat.includes(w.toLowerCase())) return "その言葉は投じられません";
+  if (fingerprint(t).length < 2) return "もう少し詠んでください";
+  return null;
+}
 
-  if (CONF.COOLDOWN_SEC > 0){
-    const last = Number(localStorage.getItem(LS_LAST) || 0);
-    const wait = Math.ceil((CONF.COOLDOWN_SEC*1000 - (Date.now()-last)) / 1000);
-    if (wait > 0) return toast(`あと${wait}秒お待ちください`);
+submit.addEventListener("click", async ()=>{
+  const text = input.value.trim().replace(/\n{3,}/g,"\n\n");
+  const n = [...text].length;
+  if (!text || n>CONF.MAX_CHARS) return;
+
+  const bad = screen(text);
+  if (bad) { composeErr.textContent = bad; return; }
+
+  if (CONF.COOLDOWN_SEC>0){
+    const wait = Math.ceil((CONF.COOLDOWN_SEC*1000 - (Date.now()-Number(localStorage.getItem(LS.last)||0)))/1000);
+    if (wait>0){ composeErr.textContent = `あと${wait}秒お待ちください`; return; }
   }
 
   submit.disabled = true;
-  try {
-    await addDoc(collection(db, CONF.COLLECTION), {
-      text, likes:0, reports:0, createdAt: serverTimestamp()
-    });
-    localStorage.setItem(LS_LAST, String(Date.now()));
-    input.value = "";
-    input.dispatchEvent(new Event("input"));
-    closeSheet();
-    toast("吊るしました");
+  try{
+    const id = await idFor(text);
+    const ref = doc(db, CONF.COLLECTION, id);
+    if ((await getDoc(ref)).exists()){
+      composeErr.textContent = "その句はもう詠まれています";
+      submit.disabled = false; return;
+    }
+    await setDoc(ref, { text, likes:0, reports:0, createdAt: serverTimestamp() });
+    localStorage.setItem(LS.last, String(Date.now()));
+    input.value=""; input.dispatchEvent(new Event("input"));
+    closeSheets(); toast("投じました");
     cache.recent = cache.random = null;
-    if (mode !== "popular") load();
-  } catch (e) {
+    if (mode!=="popular") load();
+  }catch(e){
     console.error(e);
-    toast("吊るせませんでした");
+    composeErr.textContent = "投じられませんでした";
     submit.disabled = false;
   }
 });
 
-/* ── トースト ── */
-let toastTimer;
-function toast(msg){
-  const el = document.getElementById("toast");
-  el.textContent = msg;
-  el.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>el.classList.remove("show"), 2000);
+/* ══════════ 管理 ══════════ */
+const adminView = document.getElementById("adminView");
+
+function renderAdmin(){
+  if (!auth) return;
+  if (!isAdmin){
+    adminView.innerHTML = `
+      <div class="adminForm">
+        <h2 style="font-family:var(--ku);font-size:15px;margin:14px 0 0">管理者</h2>
+        <input id="aMail" type="email" placeholder="メールアドレス" autocomplete="username">
+        <input id="aPass" type="password" placeholder="パスワード" autocomplete="current-password">
+        <div class="btns"><button class="btn primary" id="aLogin" type="button">入る</button>
+        <a class="btn" href="#" style="text-decoration:none">戻る</a></div>
+        <p class="err" id="aErr"></p>
+      </div>`;
+    document.getElementById("aLogin").addEventListener("click", async ()=>{
+      try{
+        await signInWithEmailAndPassword(auth,
+          document.getElementById("aMail").value.trim(),
+          document.getElementById("aPass").value);
+      }catch(e){ document.getElementById("aErr").textContent = "入れませんでした"; }
+    });
+    return;
+  }
+  adminView.innerHTML = `
+    <div class="adminBar">
+      <strong style="font-family:var(--ku);font-size:15px">通報された句</strong>
+      <span style="flex:1"></span>
+      <button class="btn" id="aReload" type="button">読み直す</button>
+      <a class="btn" href="#" style="text-decoration:none">一覧へ</a>
+      <button class="btn" id="aOut" type="button">出る</button>
+    </div>
+    <div id="aList"><p class="note">読み込んでいます</p></div>`;
+  document.getElementById("aOut").addEventListener("click", ()=>signOut(auth));
+  document.getElementById("aReload").addEventListener("click", loadReports);
+  loadReports();
+}
+
+async function loadReports(){
+  const box = document.getElementById("aList");
+  if (!box) return;
+  try{
+    const q = query(collection(db,CONF.COLLECTION),
+                    where("reports",">=",1), orderBy("reports","desc"), limit(100));
+    const list = (await getDocs(q)).docs.map(d=>({id:d.id,...d.data()}));
+    if (!list.length){ box.innerHTML = `<p class="note"><b>通報はありません</b>平和です。</p>`; return; }
+    box.innerHTML = "";
+    list.forEach(p=>{
+      const el = document.createElement("div");
+      el.className = "adminItem";
+      el.innerHTML = `<div class="sub">通報 ${p.reports}　/　点 ${p.likes||0}${(p.reports>=CONF.HIDE_AT)?"　/　非表示中":""}</div>
+        <p></p>
+        <div class="btns">
+          <button class="btn danger" data-act="del" type="button">削除</button>
+          <button class="btn" data-act="ok" type="button">問題なし</button>
+        </div>`;
+      el.querySelector("p").textContent = p.text||"";
+      el.querySelector('[data-act="del"]').addEventListener("click", async ()=>{
+        if (!confirm("この句を削除しますか？")) return;
+        try{ await deleteDoc(doc(db,CONF.COLLECTION,p.id)); el.remove(); toast("削除しました"); }
+        catch(e){ console.error(e); toast("削除できませんでした"); }
+      });
+      el.querySelector('[data-act="ok"]').addEventListener("click", async ()=>{
+        try{ await updateDoc(doc(db,CONF.COLLECTION,p.id), { reports:0 }); el.remove(); toast("通報を取り消しました"); }
+        catch(e){ console.error(e); toast("変えられませんでした"); }
+      });
+      box.appendChild(el);
+    });
+  }catch(e){
+    console.error(e);
+    box.innerHTML = `<p class="note"><b>読み込めませんでした</b>権限とルールを確かめてください。</p>`;
+  }
+}
+
+/* ══════════ 報せ ══════════ */
+let tt;
+function toast(m){
+  const el=document.getElementById("toast");
+  el.textContent=m; el.classList.add("show");
+  clearTimeout(tt); tt=setTimeout(()=>el.classList.remove("show"),2100);
 }
 </script>
 </body>
