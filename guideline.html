@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>この会のルール - クソ俳句同好会</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --board:#26312C; --board-deep:#1C241F; --line:rgba(239,233,218,.13);
+  --shu:#C0402C; --sumi:#2B2A26; --kinari:#EFE9DA;
+  --disp:"Zen Old Mincho",serif; --ui:"Zen Kaku Gothic New",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:var(--ui);background:var(--board-deep);color:var(--kinari);
+  background-image:linear-gradient(180deg,var(--board) 0,var(--board-deep) 340px);
+  background-repeat:no-repeat;
+}
+.wrap{max-width:640px;margin:0 auto;padding:26px 18px calc(50px + env(safe-area-inset-bottom))}
+a.back{color:rgba(239,233,218,.5);text-decoration:none;font-size:13px}
+h1{
+  font-family:var(--disp);font-size:22px;letter-spacing:.05em;
+  margin:18px 0 4px;font-weight:700;
+}
+.lead{font-size:12.5px;color:rgba(239,233,218,.5);margin:0 0 26px}
+.rule{
+  display:flex;gap:14px;padding:18px 0;border-top:1px solid var(--line);
+}
+.rule:last-of-type{border-bottom:1px solid var(--line)}
+.num{
+  flex:0 0 auto;width:30px;height:30px;border-radius:50%;
+  border:1px solid var(--shu);color:var(--shu);
+  display:grid;place-items:center;font-family:var(--disp);font-size:14px;
+}
+.rule h2{font-size:15.5px;margin:2px 0 6px;font-weight:700}
+.rule p{font-size:13px;line-height:1.85;color:rgba(239,233,218,.7);margin:0}
+
+section.notes{margin-top:34px}
+section.notes h2{
+  font-family:var(--disp);font-size:16px;margin:0 0 12px;font-weight:700;
+  border-left:3px solid var(--shu);padding-left:10px;
+}
+section.notes p, section.notes li{font-size:13px;line-height:1.9;color:rgba(239,233,218,.68)}
+section.notes ul{margin:8px 0 22px;padding-left:1.2em}
+section.notes li{margin-bottom:6px}
+
+.contact{
+  margin-top:30px;padding:16px;border:1px solid var(--line);border-radius:6px;
+  background:rgba(239,233,218,.03);font-size:13px;line-height:1.9;
+}
+.contact a{color:var(--kinari);border-bottom:1px solid rgba(239,233,218,.35)}
+.foot{margin-top:30px;font-size:11px;color:rgba(239,233,218,.35);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./kuso-haiku.html">← 短冊にもどる</a>
+  <h1>この会のルール</h1>
+  <p class="lead">クソ俳句同好会の三原則を、このサイトでも引き継いでいます。</p>
+
+  <div class="rule">
+    <div class="num">1</div>
+    <div><h2>クソ俳句をつくる</h2>
+      <p>クソ俳句を作りましょう。まともな俳句でもいいです。</p></div>
+  </div>
+  <div class="rule">
+    <div class="num">2</div>
+    <div><h2>暴言はダメ</h2>
+      <p>それはそう。誰かを傷つける言葉、差別的な表現、脅し文句は投じないでください。</p></div>
+  </div>
+  <div class="rule">
+    <div class="num">3</div>
+    <div><h2>やさしいせかい</h2>
+      <p>めざせラブアンドピース。</p></div>
+  </div>
+
+  <section class="notes">
+    <h2>投稿にあたって</h2>
+    <ul>
+      <li>投稿は匿名です。名前も投稿履歴も残りません。</li>
+      <li>投じた句はあとから自分で消すことはできません。投じる前にひと呼吸。</li>
+      <li>連絡先(URL・メールアドレス・電話番号らしき数字)を含む投稿はできない設計にしています。</li>
+      <li>同じ内容の連続投稿(数字や記号を変えただけのものを含む)は弾かれます。</li>
+    </ul>
+
+    <h2>削除・非表示について</h2>
+    <ul>
+      <li>投稿は「通報」機能から誰でも通報できます。一定数の通報が集まった句は自動で一覧から非表示になります。</li>
+      <li>管理者が内容を確認し、問題があれば削除、なければ通報を取り消して再表示します。</li>
+      <li>権利侵害にあたる投稿など、緊急の削除依頼は下記の連絡先まで。</li>
+    </ul>
+
+    <h2>個人情報について</h2>
+    <p>このサイトは、投稿フォーム上でアカウント登録や個人情報の入力を求めていません。投稿本文以外の情報(名前・連絡先など)を紐づけて保存・表示することはありません。</p>
+    <p>ただし、サイトの土台として利用しているFirebase(Google Cloud)側で、通信に伴う技術的なログ(アクセス元の情報など)が一定期間保持される場合があります。これは同種のオンラインサービスに共通する一般的な仕組みで、このサイト側で個別に取得・閲覧しているものではありません。</p>
+
+    <h2>免責</h2>
+    <p>投稿された内容は投稿者個人の表現であり、このサイトの運営者の見解を示すものではありません。運営者は投稿内容の正確性・適法性を保証せず、投稿内容によって利用者や第三者に生じた損害について、責任を負いかねます。</p>
+    <p>通報や連絡を受けた投稿への対応(削除・非表示など)は、確認でき次第、運営者の判断で行いますが、対応の速さや結果をお約束するものではありません。</p>
+  </section>
+
+  <div class="contact">
+    削除依頼・不適切な投稿の連絡・その他お問い合わせは<br>
+    X: <a href="https://x.com/sazyou_dnrk" target="_blank" rel="noopener">@sazyou_dnrk</a> までDMをどうぞ。
+  </div>
+
+  <p class="foot">クソ俳句同好会 / 砂上電力</p>
+</div>
+</body>
+</html>
