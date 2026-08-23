@@ -41,6 +41,13 @@ body{
 
 /* ── ヘッダ ── */
 header{padding:24px 2px 12px;display:flex;align-items:center;gap:11px}
+.headText{flex:1;min-width:0}
+.ruleLink{
+  flex:0 0 auto;font-size:11px;color:rgba(239,233,218,.5);
+  text-decoration:none;border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;letter-spacing:.02em;white-space:nowrap;
+}
+.ruleLink:active{color:var(--kinari);border-color:var(--shu)}
 .seal{
   flex:0 0 auto;width:38px;height:38px;border:2px solid var(--shu);
   border-radius:3px;display:grid;place-items:center;
@@ -244,10 +251,11 @@ textarea::placeholder{color:rgba(239,233,218,.25)}
 <div class="wrap">
   <header>
     <div class="seal" aria-hidden="true">句</div>
-    <div>
+    <div class="headText">
       <h1 class="brand">クソ俳句同好会</h1>
       <div class="tagline">しょうもねえ　みんなで詠もう　クソ俳句</div>
     </div>
+    <a class="ruleLink" href="./guideline.html">会のルール</a>
   </header>
   <div class="rule"></div>
 
@@ -390,6 +398,7 @@ const MODE_NOTE = {
   recent:  `新しい順に`
 };
 const grid = document.getElementById("grid");
+const adminView = document.getElementById("adminView");
 let db=null, auth=null, isAdmin=false, mode="random";
 const cache = { random:null, popular:null, recent:null };
 
@@ -650,8 +659,6 @@ submit.addEventListener("click", async ()=>{
 });
 
 /* ══════════ 管理 ══════════ */
-const adminView = document.getElementById("adminView");
-
 function renderAdmin(){
   if (!auth) return;
   if (!isAdmin){
