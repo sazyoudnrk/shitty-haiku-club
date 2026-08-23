@@ -228,6 +228,15 @@ textarea::placeholder{color:rgba(239,233,218,.25)}
 .setup{margin:16px 0;padding:14px;border:1px solid var(--shu);border-radius:3px;
   background:var(--shu-soft);font-size:12.5px;line-height:1.8}
 
+.siteFooter{
+  margin-top:22px;padding:16px 2px calc(10px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--line);
+  font-size:11px;color:rgba(239,233,218,.4);text-align:center;letter-spacing:.03em;
+}
+.siteFooter a{color:rgba(239,233,218,.55);text-decoration:none;border-bottom:1px solid rgba(239,233,218,.25)}
+.siteFooter a:active{color:var(--shu);border-color:var(--shu)}
+.siteFooter .sep{margin:0 8px;opacity:.4}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -255,6 +264,12 @@ textarea::placeholder{color:rgba(239,233,218,.25)}
       <button class="reload" id="reload" type="button">↻ 読み直す</button>
     </div>
     <main class="grid" id="grid" role="tabpanel"></main>
+
+  <footer class="siteFooter">
+    <a href="./guideline.html">この会のルール</a>
+    <span class="sep">・</span>
+    <a href="https://x.com/sazyou_dnrk" target="_blank" rel="noopener">連絡先／@sazyou_dnrk</a>
+  </footer>
   </div>
 
   <div id="adminView" hidden></div>
