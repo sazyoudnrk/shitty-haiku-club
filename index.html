@@ -369,6 +369,11 @@ const NG_PATTERNS = [
 const LS = { ten:"kh.ten", rep:"kh.rep", last:"kh.last" };
 
 /* ══════════ 起動 ══════════ */
+const MODE_NOTE = {
+  random:  `直近${CONF.RANDOM_DAYS}日から無作為に`,
+  popular: `直近${CONF.POPULAR_DAYS}日で点の多い順に`,
+  recent:  `新しい順に`
+};
 const grid = document.getElementById("grid");
 let db=null, auth=null, isAdmin=false, mode="random";
 const cache = { random:null, popular:null, recent:null };
@@ -399,11 +404,6 @@ function routeHash(){
 }
 
 /* ══════════ 一覧 ══════════ */
-const MODE_NOTE = {
-  random:  `直近${CONF.RANDOM_DAYS}日から無作為に`,
-  popular: `直近${CONF.POPULAR_DAYS}日で点の多い順に`,
-  recent:  `新しい順に`
-};
 function setMode(m){
   mode = m;
   document.querySelectorAll(".tab").forEach(t=>
