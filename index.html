@@ -301,6 +301,21 @@ textarea::placeholder{color:rgba(239,233,218,.25)}
 
 <div class="toast" id="toast"></div>
 
+<div id="dbg" style="display:none;position:fixed;top:0;left:0;right:0;z-index:999;
+  background:#3a0f0f;color:#ffd7d7;font:11px/1.5 monospace;padding:8px 10px;
+  max-height:40vh;overflow:auto;white-space:pre-wrap;"></div>
+<script>
+(function(){
+  const box = document.getElementById('dbg');
+  function show(msg){ box.style.display='block'; box.textContent += msg + '\n\n'; }
+  window.addEventListener('error', e=>{
+    show('ERROR: ' + e.message + '\n  at ' + (e.filename||'') + ':' + (e.lineno||'') + ':' + (e.colno||''));
+  });
+  window.addEventListener('unhandledrejection', e=>{
+    show('PROMISE REJECTED: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+  });
+})();
+</script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {
