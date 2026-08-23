@@ -101,9 +101,9 @@ nav{display:flex;gap:0;padding:12px 0 0;position:sticky;top:0;z-index:5;
 }
 /* 続きあり */
 .more{
-  position:absolute;left:6px;top:12px;
-  font-family:var(--ku);font-size:13px;color:rgba(43,42,38,.45);
-  writing-mode:vertical-rl;display:none;
+  position:absolute;right:5px;bottom:34px;
+  font-family:var(--ku);font-size:12px;color:rgba(43,42,38,.55);
+  display:none;
 }
 .tz.clipped .more{display:block}
 
@@ -444,6 +444,18 @@ async function load(){
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}}
 function note(t,b){return `<p class="note"><b>${t}</b>${b}</p>`;}
 
+/* カードに収まる目安の文字数（縦書き4列想定）。超えたら…で切る */
+const CARD_CHARS = 34;
+function cardText(raw){
+  const text = String(raw||"");
+  const chars = [...text];
+  if (chars.length <= CARD_CHARS) return { display:text, clipped:false };
+  let cut = chars.slice(0, CARD_CHARS).join("");
+  const nl = cut.lastIndexOf("\n");
+  if (nl > CARD_CHARS * 0.4) cut = cut.slice(0, nl);
+  return { display: cut.replace(/[\s\u3000]+$/,"") + "…", clipped:true };
+}
+
 function render(list){
   if(!list.length){
     grid.innerHTML = note(mode==="popular" ? `この${CONF.POPULAR_DAYS}日はまだ静かです。` : "まだ一句もありません。",
@@ -454,24 +466,19 @@ function render(list){
   grid.innerHTML="";
   list.forEach((p,i)=>{
     const on = ten.has(p.id);
+    const { display, clipped } = cardText(p.text);
     const el = document.createElement("button");
     el.type="button";
-    el.className = `tz w${colorOf(p.id)}`;
+    el.className = `tz w${colorOf(p.id)}` + (clipped ? " clipped" : "");
     el.style.animationDelay = Math.min(i,15)*18+"ms";
-    el.innerHTML = `<span class="more">…</span><div class="ku"></div>
+    el.innerHTML = `<div class="ku"></div>
       <span class="ten${on?" on":""}"><span class="dot">点</span><span class="n">${p.likes||0}</span></span>`;
-    el.querySelector(".ku").textContent = p.text||"";
+    el.querySelector(".ku").textContent = display;
     el.querySelector(".ten").addEventListener("click", ev=>{
       ev.stopPropagation(); addTen(p, ev.currentTarget);
     });
     el.addEventListener("click", ()=>openDetail(p));
     grid.appendChild(el);
-  });
-  requestAnimationFrame(()=>{
-    grid.querySelectorAll(".tz").forEach(el=>{
-      const k = el.querySelector(".ku");
-      if (k.scrollWidth > k.clientWidth+1) el.classList.add("clipped");
-    });
   });
 }
 function colorOf(id){let h=0;for(const c of String(id))h=(h*31+c.charCodeAt(0))>>>0;return h%5;}
