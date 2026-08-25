@@ -207,6 +207,7 @@ textarea::placeholder{color:rgba(239,233,218,.25)}
 }
 #detailPaper .ku{font-size:16px;line-height:1.9;max-height:300px;overflow:auto}
 .detailBar{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.shareFull{width:100%;padding:12px;margin-bottom:10px;font-size:13.5px;letter-spacing:.04em}
 
 /* ── 管理 ── */
 .adminBar{display:flex;gap:8px;align-items:center;padding:12px 0;flex-wrap:wrap}
@@ -312,6 +313,7 @@ textarea::placeholder{color:rgba(239,233,218,.25)}
 <section class="sheet" id="detailSheet" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
   <h2 id="detailTitle">一句</h2>
   <div id="detailPaper"><div class="ku" id="detailKu"></div></div>
+  <button class="btn primary shareFull" id="shareBtn" type="button">この句をシェア</button>
   <div class="detailBar">
     <button class="btn" id="reportBtn" type="button">通報する</button>
     <div class="btns">
@@ -571,6 +573,7 @@ document.getElementById("reportBtn").addEventListener("click", ()=>{
   if (confirm("この句を通報しますか？")) report(current);
 });
 document.getElementById("detailClose").addEventListener("click", closeSheets);
+document.getElementById("shareBtn").addEventListener("click", ()=>{ if(current) shareHaiku(current); });
 scrim.addEventListener("click", closeSheets);
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeSheets(); });
 function closeSheets(){
@@ -578,6 +581,106 @@ function closeSheets(){
   composeSheet.classList.remove("open");
   scrim.classList.remove("open");
   current=null;
+}
+
+/* ══════════ シェア画像 ══════════ */
+const SITE_URL = location.origin + location.pathname.replace(/[^/]*$/, "");
+
+function cssVar(name, fallback){
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return v || fallback;
+}
+
+async function buildShareCanvas(p){
+  if (document.fonts && document.fonts.ready) {
+    try{ await document.fonts.ready; }catch{}
+  }
+  const PAPER = cssVar(`--w${colorOf(p.id)}`, "#EFE9DA");
+  const SUMI  = cssVar("--sumi", "#2B2A26");
+  const BOARD = cssVar("--board-deep", "#1C241F");
+  const SHU   = cssVar("--shu", "#C0402C");
+  const KINARI= cssVar("--kinari", "#EFE9DA");
+
+  const H = 1350;
+  const paperH = Math.round(H*0.76);
+  const padX = 90, padTop = 110, padBottom = 90;
+  const fontSize = 56, lineH = fontSize*1.65, colW = fontSize*1.55;
+  const maxCharsPerCol = Math.max(3, Math.floor((paperH-padTop-padBottom)/lineH));
+
+  const columns = [];
+  String(p.text||"").split("\n").forEach(line=>{
+    const chars=[...line];
+    if(!chars.length) return;
+    for(let i=0;i<chars.length;i+=maxCharsPerCol) columns.push(chars.slice(i,i+maxCharsPerCol).join(""));
+  });
+  if(!columns.length) columns.push("　");
+
+  const W = Math.max(1080, padX*2 + columns.length*colW);
+  const canvas = document.createElement("canvas");
+  canvas.width=W; canvas.height=H;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = PAPER; ctx.fillRect(0,0,W,paperH);
+  ctx.save();
+  ctx.globalAlpha=.05; ctx.strokeStyle=SUMI; ctx.lineWidth=1;
+  for(let x=0;x<W;x+=5){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,paperH); ctx.stroke(); }
+  ctx.restore();
+  ctx.fillStyle = BOARD; ctx.beginPath(); ctx.arc(W/2,34,10,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = BOARD; ctx.fillRect(0,paperH,W,H-paperH);
+
+  ctx.fillStyle = SUMI;
+  ctx.font = `500 ${fontSize}px "Shippori Mincho B1", serif`;
+  ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+  columns.forEach((col,ci)=>{
+    const x = W - padX - colW*ci - colW/2;
+    let y = padTop + fontSize;
+    for (const ch of col){ ctx.fillText(ch, x, y); y += lineH; }
+  });
+
+  ctx.textAlign="center";
+  ctx.fillStyle = SHU;
+  ctx.font = `700 40px "Zen Old Mincho", serif`;
+  ctx.fillText("クソ俳句同好会", W/2, paperH+62);
+
+  ctx.fillStyle = KINARI; ctx.globalAlpha=.8;
+  ctx.font = `400 26px "Zen Kaku Gothic New", sans-serif`;
+  ctx.fillText(`${SITE_URL.replace(/^https?:\/\//,"")}　#クソ俳句`, W/2, paperH+106);
+  ctx.globalAlpha=1;
+
+  return canvas;
+}
+
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 4000);
+}
+
+async function shareHaiku(p){
+  const btn = document.getElementById("shareBtn");
+  btn.disabled = true; btn.textContent = "作っています…";
+  try{
+    const canvas = await buildShareCanvas(p);
+    const blob = await new Promise(res => canvas.toBlob(res, "image/png", 0.95));
+    const shareText = `${p.text}\n\n#クソ俳句`;
+    const file = blob ? new File([blob], "kuso-haiku.png", { type:"image/png" }) : null;
+
+    if (file && navigator.canShare && navigator.canShare({ files:[file] })) {
+      await navigator.share({ files:[file], text: shareText, url: SITE_URL });
+    } else if (navigator.share) {
+      await navigator.share({ text: shareText, url: SITE_URL });
+    } else if (blob) {
+      downloadBlob(blob, "kuso-haiku.png");
+      const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(SITE_URL)}`;
+      window.open(intent, "_blank", "noopener");
+      toast("画像を保存しました。投稿画面に添付してください");
+    }
+  }catch(e){
+    if (e && e.name !== "AbortError"){ console.error(e); toast("シェアできませんでした"); }
+  }finally{
+    btn.disabled = false; btn.textContent = "この句をシェア";
+  }
 }
 
 /* ══════════ 投句 ══════════ */
