@@ -401,6 +401,9 @@ const MODE_NOTE = {
 };
 const grid = document.getElementById("grid");
 const adminView = document.getElementById("adminView");
+const scrim = document.getElementById("scrim");
+const detailSheet = document.getElementById("detailSheet");
+const composeSheet = document.getElementById("composeSheet");
 let db=null, auth=null, isAdmin=false, mode="random";
 const cache = { random:null, popular:null, recent:null };
 
@@ -422,11 +425,27 @@ if (String(firebaseConfig.apiKey).startsWith("PASTE")) {
 window.addEventListener("hashchange", routeHash);
 
 function routeHash(){
-  const admin = location.hash === "#admin";
+  const hash = location.hash;
+  const admin = hash === "#admin";
   document.getElementById("publicView").hidden = admin;
   document.getElementById("adminView").hidden = !admin;
   document.getElementById("fab").style.display = admin ? "none" : "";
-  if (admin) renderAdmin();
+  if (admin) { renderAdmin(); return; }
+  if (hash.startsWith("#q=")) openById(hash.slice(3));
+}
+
+/* 指定された一句を開く */
+async function openById(id){
+  if (!db || !id) return;
+  for (const k of Object.keys(cache)){
+    const hit = cache[k] && cache[k].find(p=>p.id===id);
+    if (hit) return openDetail(hit);
+  }
+  try{
+    const snap = await getDoc(doc(db, CONF.COLLECTION, id));
+    if (snap.exists()) openDetail({ id:snap.id, ...snap.data() });
+    else toast("その句は見つかりませんでした");
+  }catch(e){ console.error(e); }
 }
 
 /* ══════════ 一覧 ══════════ */
@@ -546,9 +565,6 @@ async function report(p){
 
 /* ══════════ 詳細 ══════════ */
 let current=null;
-const scrim = document.getElementById("scrim");
-const detailSheet = document.getElementById("detailSheet");
-const composeSheet = document.getElementById("composeSheet");
 
 function openDetail(p){
   current = p;
@@ -581,6 +597,9 @@ function closeSheets(){
   composeSheet.classList.remove("open");
   scrim.classList.remove("open");
   current=null;
+  if (location.hash.startsWith("#q=")){
+    history.replaceState(null, "", location.pathname + location.search);
+  }
 }
 
 /* ══════════ シェア画像 ══════════ */
@@ -633,10 +652,13 @@ async function buildShareCanvas(p){
   ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
   const maxLen = Math.max(...columns.map(c=>c.length), 1);
   const blockH = maxLen * lineH;
+  const blockW = columns.length * colW;
   const startY = (paperH - blockH)/2 + fontSize*0.85;
+  const rightEdge = W/2 + blockW/2;
   columns.forEach((col,ci)=>{
-    const x = W - padX - colW*ci - colW/2;
-    let y = startY;
+    const x = rightEdge - colW*ci - colW/2;
+    const colH = col.length * lineH;
+    let y = (paperH - colH)/2 + fontSize*0.85;
     for (const ch of col){ ctx.fillText(ch, x, y); y += lineH; }
   });
 
@@ -667,15 +689,16 @@ async function shareHaiku(p){
     const canvas = await buildShareCanvas(p);
     const blob = await new Promise(res => canvas.toBlob(res, "image/png", 0.95));
     const shareText = `${p.text}\n\n#クソ俳句同好会`;
+    const shareUrl = SITE_URL + "#q=" + p.id;
     const file = blob ? new File([blob], "kuso-haiku.png", { type:"image/png" }) : null;
 
     if (file && navigator.canShare && navigator.canShare({ files:[file] })) {
-      await navigator.share({ files:[file], text: shareText, url: SITE_URL });
+      await navigator.share({ files:[file], text: shareText, url: shareUrl });
     } else if (navigator.share) {
-      await navigator.share({ text: shareText, url: SITE_URL });
+      await navigator.share({ text: shareText, url: shareUrl });
     } else if (blob) {
       downloadBlob(blob, "kuso-haiku.png");
-      const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(SITE_URL)}`;
+      const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
       window.open(intent, "_blank", "noopener");
       toast("画像を保存しました。投稿画面に添付してください");
     }
