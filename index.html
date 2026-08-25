@@ -631,9 +631,12 @@ async function buildShareCanvas(p){
   ctx.fillStyle = SUMI;
   ctx.font = `500 ${fontSize}px "Shippori Mincho B1", serif`;
   ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+  const maxLen = Math.max(...columns.map(c=>c.length), 1);
+  const blockH = maxLen * lineH;
+  const startY = (paperH - blockH)/2 + fontSize*0.85;
   columns.forEach((col,ci)=>{
     const x = W - padX - colW*ci - colW/2;
-    let y = padTop + fontSize;
+    let y = startY;
     for (const ch of col){ ctx.fillText(ch, x, y); y += lineH; }
   });
 
@@ -642,9 +645,9 @@ async function buildShareCanvas(p){
   ctx.font = `700 40px "Zen Old Mincho", serif`;
   ctx.fillText("クソ俳句同好会", W/2, paperH+62);
 
-  ctx.fillStyle = KINARI; ctx.globalAlpha=.8;
-  ctx.font = `400 26px "Zen Kaku Gothic New", sans-serif`;
-  ctx.fillText(`${SITE_URL.replace(/^https?:\/\//,"")}　#クソ俳句`, W/2, paperH+106);
+  ctx.fillStyle = KINARI; ctx.globalAlpha=.85;
+  ctx.font = `500 26px "Zen Kaku Gothic New", sans-serif`;
+  ctx.fillText(`${SITE_URL.replace(/^https?:\/\//,"")}　#クソ俳句同好会`, W/2, paperH+106);
   ctx.globalAlpha=1;
 
   return canvas;
@@ -663,7 +666,7 @@ async function shareHaiku(p){
   try{
     const canvas = await buildShareCanvas(p);
     const blob = await new Promise(res => canvas.toBlob(res, "image/png", 0.95));
-    const shareText = `${p.text}\n\n#クソ俳句`;
+    const shareText = `${p.text}\n\n#クソ俳句同好会`;
     const file = blob ? new File([blob], "kuso-haiku.png", { type:"image/png" }) : null;
 
     if (file && navigator.canShare && navigator.canShare({ files:[file] })) {
