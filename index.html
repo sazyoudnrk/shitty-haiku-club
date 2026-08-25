@@ -606,8 +606,8 @@ async function buildShareCanvas(p){
   const KINARI= cssVar("--kinari", "#EFE9DA");
 
   const H = 1350;
-  const paperH = Math.round(H*0.76);
-  const padX = 90, padTop = 110, padBottom = 90;
+  const paperH = Math.round(H*0.925);
+  const padX = 70, padTop = 110, padBottom = 90;
   const fontSize = 56, lineH = fontSize*1.65, colW = fontSize*1.55;
   const maxCharsPerCol = Math.max(3, Math.floor((paperH-padTop-padBottom)/lineH));
 
@@ -619,7 +619,7 @@ async function buildShareCanvas(p){
   });
   if(!columns.length) columns.push("　");
 
-  const W = Math.max(1080, padX*2 + columns.length*colW);
+  const W = Math.max(760, padX*2 + columns.length*colW);
   const canvas = document.createElement("canvas");
   canvas.width=W; canvas.height=H;
   const ctx = canvas.getContext("2d");
@@ -629,16 +629,12 @@ async function buildShareCanvas(p){
   ctx.globalAlpha=.05; ctx.strokeStyle=SUMI; ctx.lineWidth=1;
   for(let x=0;x<W;x+=5){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,paperH); ctx.stroke(); }
   ctx.restore();
-  ctx.fillStyle = BOARD; ctx.beginPath(); ctx.arc(W/2,34,10,0,Math.PI*2); ctx.fill();
   ctx.fillStyle = BOARD; ctx.fillRect(0,paperH,W,H-paperH);
 
   ctx.fillStyle = SUMI;
   ctx.font = `500 ${fontSize}px "Shippori Mincho B1", serif`;
   ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
-  const maxLen = Math.max(...columns.map(c=>c.length), 1);
-  const blockH = maxLen * lineH;
   const blockW = columns.length * colW;
-  const startY = (paperH - blockH)/2 + fontSize*0.85;
   const rightEdge = W/2 + blockW/2;
   columns.forEach((col,ci)=>{
     const x = rightEdge - colW*ci - colW/2;
@@ -649,12 +645,12 @@ async function buildShareCanvas(p){
 
   ctx.textAlign="center";
   ctx.fillStyle = SHU;
-  ctx.font = `700 40px "Zen Old Mincho", serif`;
-  ctx.fillText("クソ俳句同好会", W/2, paperH+62);
+  ctx.font = `700 30px "Zen Old Mincho", serif`;
+  ctx.fillText("クソ俳句同好会", W/2, paperH+46);
 
-  ctx.fillStyle = KINARI; ctx.globalAlpha=.85;
-  ctx.font = `500 26px "Zen Kaku Gothic New", sans-serif`;
-  ctx.fillText(`${SITE_URL.replace(/^https?:\/\//,"")}　#クソ俳句同好会`, W/2, paperH+106);
+  ctx.fillStyle = KINARI; ctx.globalAlpha=.8;
+  ctx.font = `400 21px "Zen Kaku Gothic New", sans-serif`;
+  ctx.fillText(SITE_URL.replace(/^https?:\/\//,""), W/2, paperH+80);
   ctx.globalAlpha=1;
 
   return canvas;
