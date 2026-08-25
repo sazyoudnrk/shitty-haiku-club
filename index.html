@@ -295,7 +295,7 @@ textarea::placeholder{color:rgba(239,233,218,.25)}
     <div class="preview empty w0" id="preview"><div class="ku" id="previewKu">　</div></div>
     <div class="field">
       <textarea id="input" maxlength="130" rows="4"
-        placeholder="しょうもねえ&#10;みんなで詠もう&#10;クソ俳句" aria-label="句の本文"></textarea>
+        placeholder="古池や&#10;蛙飛びこむ&#10;水の音" aria-label="句の本文"></textarea>
       <div class="row">
         <span class="count" id="count">0 / 100</span>
         <div class="btns">
@@ -636,10 +636,11 @@ async function buildShareCanvas(p){
   ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
   const blockW = columns.length * colW;
   const rightEdge = W/2 + blockW/2;
+  const maxLen = Math.max(...columns.map(c=>c.length), 1);
+  const startY = (paperH - maxLen*lineH)/2 + fontSize*0.85;
   columns.forEach((col,ci)=>{
     const x = rightEdge - colW*ci - colW/2;
-    const colH = col.length * lineH;
-    let y = (paperH - colH)/2 + fontSize*0.85;
+    let y = startY;
     for (const ch of col){ ctx.fillText(ch, x, y); y += lineH; }
   });
 
@@ -690,6 +691,17 @@ async function shareHaiku(p){
   }
 }
 
+/* 投句欄の下敷きに使う古句（いずれも著作権の切れた古典） */
+const MEIKU = [
+  "古池や\n蛙飛びこむ\n水の音",
+  "柿くへば\n鐘が鳴るなり\n法隆寺",
+  "雀の子\nそこのけそこのけ\n御馬が通る",
+  "菜の花や\n月は東に\n日は西に",
+  "閑さや\n岩にしみ入る\n蝉の声",
+  "痩蛙\nまけるな一茶\n是に有り",
+  "五月雨を\nあつめて早し\n最上川"
+];
+
 /* ══════════ 投句 ══════════ */
 const input=document.getElementById("input"), countEl=document.getElementById("count"),
       submit=document.getElementById("submit"), preview=document.getElementById("preview"),
@@ -698,6 +710,7 @@ const input=document.getElementById("input"), countEl=document.getElementById("c
 document.getElementById("fab").addEventListener("click", ()=>{
   if(!db) return toast("まだ準備ができていません");
   composeErr.textContent="";
+  input.placeholder = MEIKU[Math.random()*MEIKU.length|0];
   preview.className = "preview empty w"+(Math.random()*5|0);
   composeSheet.classList.add("open"); scrim.classList.add("open");
   setTimeout(()=>input.focus(),240);
