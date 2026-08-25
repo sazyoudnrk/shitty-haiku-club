@@ -673,17 +673,17 @@ async function shareHaiku(p){
   try{
     const canvas = await buildShareCanvas(p);
     const blob = await new Promise(res => canvas.toBlob(res, "image/png", 0.95));
-    const shareText = `${p.text}\n\n#クソ俳句同好会`;
     const shareUrl = SITE_URL + "#q=" + p.id;
+    const shareText = `${p.text}\n\n#クソ俳句同好会\n${shareUrl}`;
     const file = blob ? new File([blob], "kuso-haiku.png", { type:"image/png" }) : null;
 
     if (file && navigator.canShare && navigator.canShare({ files:[file] })) {
-      await navigator.share({ files:[file], text: shareText, url: shareUrl });
+      await navigator.share({ files:[file], text: shareText });
     } else if (navigator.share) {
-      await navigator.share({ text: shareText, url: shareUrl });
+      await navigator.share({ text: shareText });
     } else if (blob) {
       downloadBlob(blob, "kuso-haiku.png");
-      const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+      const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`${p.text}\n\n#クソ俳句同好会`)}&url=${encodeURIComponent(shareUrl)}`;
       window.open(intent, "_blank", "noopener");
       toast("画像を保存しました。投稿画面に添付してください");
     }
@@ -854,4 +854,3 @@ function toast(m){
 </script>
 </body>
 </html>
-　
