@@ -264,9 +264,9 @@ textarea::placeholder{color:rgba(239,233,218,.25)}
 
   <div id="publicView">
     <nav role="tablist">
-      <button class="tab" role="tab" data-mode="random"  aria-selected="true">ランダム</button>
+      <button class="tab" role="tab" data-mode="recent"  aria-selected="true">新着</button>
+      <button class="tab" role="tab" data-mode="random"  aria-selected="false">ランダム</button>
       <button class="tab" role="tab" data-mode="popular" aria-selected="false">今週の高点</button>
-      <button class="tab" role="tab" data-mode="recent"  aria-selected="false">新着</button>
     </nav>
     <div class="meta">
       <span id="modeNote"></span>
@@ -389,7 +389,7 @@ const adminView = document.getElementById("adminView");
 const scrim = document.getElementById("scrim");
 const detailSheet = document.getElementById("detailSheet");
 const composeSheet = document.getElementById("composeSheet");
-let db=null, auth=null, isAdmin=false, mode="random";
+let db=null, auth=null, isAdmin=false, mode="recent";
 const cache = { random:null, popular:null, recent:null };
 
 if (String(firebaseConfig.apiKey).startsWith("PASTE")) {
@@ -404,7 +404,7 @@ if (String(firebaseConfig.apiKey).startsWith("PASTE")) {
     isAdmin = !!u;
     if (location.hash === "#admin") renderAdmin();
   });
-  setMode("random");
+  setMode("recent");
   routeHash();
 }
 window.addEventListener("hashchange", routeHash);
@@ -863,4 +863,3 @@ function toast(m){
 </script>
 </body>
 </html>
-　
